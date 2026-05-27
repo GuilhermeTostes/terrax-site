@@ -18,29 +18,6 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll(); // run once on load
 
-  /* ---- MOBILE MENU ---- */
-  const toggle   = document.querySelector('.nav-toggle');
-  const mobileMenu = document.getElementById('nav-menu-mobile');
-
-  if (toggle && mobileMenu) {
-    toggle.addEventListener('click', function () {
-      const isOpen = mobileMenu.classList.toggle('open');
-      toggle.classList.toggle('open', isOpen);
-      toggle.setAttribute('aria-expanded', isOpen);
-      mobileMenu.setAttribute('aria-hidden', !isOpen);
-    });
-
-    // Close menu when a link is clicked
-    mobileMenu.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', function () {
-        mobileMenu.classList.remove('open');
-        toggle.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-        mobileMenu.setAttribute('aria-hidden', 'true');
-      });
-    });
-  }
-
   /* ---- SMOOTH SCROLL FOR ANCHOR LINKS ---- */
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {

@@ -252,65 +252,28 @@ p  { line-height: 1.7; }
 }
 .nav-phone:hover { color: var(--yellow); }
 
-/* Hamburger */
-.nav-toggle {
+/* Mobile contact icons */
+.nav-mobile-ctas {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  grid-column: 3;
+}
+
+.nav-icon-btn {
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
   width: 40px;
   height: 40px;
-  background: none;
-  border: none;
-  padding: 4px;
-  margin-left: auto;
   border-radius: var(--radius);
-  transition: background var(--transition);
+  color: var(--white);
+  flex-shrink: 0;
+  transition: background var(--transition), color var(--transition);
 }
-.nav-toggle:hover { background: rgba(255,255,255,.1); }
-.hamburger-bar {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--white);
-  border-radius: 2px;
-  transition: transform var(--transition), opacity var(--transition);
-}
-.nav-toggle.open .hamburger-bar:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.nav-toggle.open .hamburger-bar:nth-child(2) { opacity: 0; }
-.nav-toggle.open .hamburger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-/* Mobile menu */
-.nav-mobile {
-  background: var(--navy-deep);
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height .4s ease, padding .3s ease;
-}
-.nav-mobile.open { max-height: 420px; }
-.nav-mobile ul {
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem 1.5rem .5rem;
-  gap: .25rem;
-}
-.nav-mobile .nav-link {
-  display: block;
-  padding: .75rem 1rem;
-  border-radius: var(--radius);
-  font-size: 1.1rem;
-}
-.nav-mobile-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .75rem;
-  padding: 1rem 1.5rem 1.5rem;
-}
-.nav-mobile-actions .btn {
-  width: 100%;
-  justify-content: center;
+.nav-icon-btn:hover {
+  background: rgba(255,255,255,.12);
+  color: var(--yellow);
 }
 
 /* ===== HERO ===== */
@@ -1025,8 +988,7 @@ a.footer-contact-item:hover { color: var(--yellow); }
 @media (min-width: 768px) {
   .nav-menu    { display: flex; }
   .nav-actions { display: flex; }
-  .nav-toggle  { display: none; }
-  .nav-mobile  { display: none !important; }
+  .nav-mobile-ctas { display: none; }
 
   /* Phone/email: visível mas não clicável em desktop/tablet */
   .nav-phone {

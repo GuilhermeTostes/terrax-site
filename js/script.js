@@ -159,6 +159,10 @@
     });
   }
 
+  /* ---- PAGE URL FOR CAMPAIGN TRACKING (gclid, fbclid, utm_*) ---- */
+  const pageUrlField = document.getElementById('page-url');
+  if (pageUrlField) pageUrlField.value = window.location.href;
+
   /* ---- FOOTER YEAR ---- */
   const yearEl = document.getElementById('footer-year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();

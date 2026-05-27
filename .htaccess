@@ -1,0 +1,79 @@
+# ============================================================
+#  TerraX Locações — .htaccess
+#  Hostgator Apache / cPanel
+# ============================================================
+
+# ---- HTTPS redirect ----------------------------------------
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ---- Remover www (canonical: sem www) ----------------------
+RewriteCond %{HTTP_HOST} ^www\.terraxlocacoes\.com\.br$ [NC]
+RewriteRule ^(.*)$ https://terraxlocacoes.com.br/$1 [L,R=301]
+
+# ---- Desabilitar listagem de diretórios --------------------
+Options -Indexes
+
+# ---- Negar acesso a arquivos sensíveis ---------------------
+<FilesMatch "(\.htaccess|\.htpasswd|\.git|\.cpanel\.yml|\.env)">
+  Require all denied
+</FilesMatch>
+
+# ---- Headers de segurança ----------------------------------
+<IfModule mod_headers.c>
+
+  # Impede clickjacking (o site nunca deve ser carregado em iframe externo)
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # Impede MIME sniffing
+  Header always set X-Content-Type-Options "nosniff"
+
+  # Proteção XSS legada (browsers antigos)
+  Header always set X-XSS-Protection "1; mode=block"
+
+  # Controle de referrer (envia origem apenas em HTTPS para mesmo domínio)
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Restringe uso de APIs sensíveis do browser
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+
+  # Content Security Policy
+  # - scripts: apenas script.js local
+  # - estilos: local + Google Fonts CDN + inline (necessário para botcheck display:none)
+  # - fontes: apenas Google Fonts (gstatic)
+  # - imagens: local + Unsplash
+  # - conexões: local + Web3Forms (submit) + Google Fonts (preconnect)
+  # - iframes: Google Maps
+  # - forms: apenas Web3Forms
+  Header always set Content-Security-Policy "\
+default-src 'self'; \
+script-src 'self'; \
+style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; \
+font-src https://fonts.gstatic.com; \
+img-src 'self' https://images.unsplash.com data: blob:; \
+connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://api.web3forms.com; \
+frame-src https://maps.google.com https://www.google.com; \
+base-uri 'self'; \
+form-action https://api.web3forms.com 'self'; \
+upgrade-insecure-requests"
+
+</IfModule>
+
+# ---- Cache para assets estáticos ---------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html                  "access plus 1 hour"
+  ExpiresByType text/css                   "access plus 1 year"
+  ExpiresByType application/javascript     "access plus 1 year"
+  ExpiresByType image/png                  "access plus 1 year"
+  ExpiresByType image/jpeg                 "access plus 1 year"
+  ExpiresByType image/webp                 "access plus 1 year"
+  ExpiresByType image/svg+xml              "access plus 1 year"
+  ExpiresByType image/x-icon              "access plus 1 year"
+</IfModule>
+
+# ---- Compressão gzip ---------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript text/plain image/svg+xml
+</IfModule>

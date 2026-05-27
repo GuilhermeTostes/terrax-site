@@ -94,17 +94,19 @@
     });
   });
 
-  /* ---- CONTACT FORM ---- */
+  /* ---- CONTACT FORM (Web3Forms) ---- */
   const form = document.getElementById('orcamento-form');
 
   if (form) {
-    form.addEventListener('submit', function (e) {
+    const successMsg = document.getElementById('form-success');
+    const errorMsg   = document.getElementById('form-error');
+
+    form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      // Basic validation
+      // Validation
       let valid = true;
-      const required = form.querySelectorAll('[required]');
-      required.forEach(field => {
+      form.querySelectorAll('[required]').forEach(field => {
         field.classList.remove('error');
         if (!field.value.trim()) {
           field.classList.add('error');
@@ -121,27 +123,35 @@
         return;
       }
 
-      // Build WhatsApp message
-      const nome       = document.getElementById('nome').value.trim();
-      const empresa    = document.getElementById('empresa').value.trim();
-      const telefone   = document.getElementById('telefone').value.trim();
-      const email      = document.getElementById('email').value.trim();
-      const equip      = document.getElementById('equipamento').value;
-      const mensagem   = document.getElementById('mensagem').value.trim();
+      const submitBtn   = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando…';
+      if (successMsg) successMsg.style.display = 'none';
+      if (errorMsg)   errorMsg.style.display   = 'none';
 
-      let msg = `Olá! Gostaria de solicitar um orçamento pela TerraX Locações.\n\n`;
-      msg += `*Nome:* ${nome}\n`;
-      if (empresa) msg += `*Empresa:* ${empresa}\n`;
-      msg += `*Telefone:* ${telefone}\n`;
-      if (email)   msg += `*E-mail:* ${email}\n`;
-      if (equip)   msg += `*Equipamento:* ${equip}\n`;
-      msg += `*Mensagem:* ${mensagem}`;
+      try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: new FormData(form)
+        });
+        const data = await response.json();
 
-      const url = `https://wa.me/5581996992424?text=${encodeURIComponent(msg)}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
+        if (data.success) {
+          form.reset();
+          if (successMsg) successMsg.style.display = 'block';
+        } else {
+          if (errorMsg) errorMsg.style.display = 'block';
+        }
+      } catch {
+        if (errorMsg) errorMsg.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
     });
 
-    // Remove error class on input
+    // Remove error state on typing
     form.querySelectorAll('input, textarea').forEach(field => {
       field.addEventListener('input', function () {
         this.classList.remove('error');

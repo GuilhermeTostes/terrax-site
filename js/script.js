@@ -159,6 +159,14 @@
     });
   }
 
+  /* ---- WHATSAPP: web.whatsapp.com em desktop, api.whatsapp.com em mobile ---- */
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  if (isMobile) {
+    document.querySelectorAll('[data-wa-mobile]').forEach(el => {
+      el.href = el.dataset.waMobile;
+    });
+  }
+
   /* ---- PAGE URL FOR CAMPAIGN TRACKING (gclid, fbclid, utm_*) ---- */
   const pageUrlField = document.getElementById('page-url');
   if (pageUrlField) pageUrlField.value = window.location.href;

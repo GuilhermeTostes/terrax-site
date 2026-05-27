@@ -29,7 +29,7 @@
 
 /* ----- RESET ----- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; font-size: 16px; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
 body {
   font-family: 'Barlow', sans-serif;
   color: var(--text);
@@ -256,6 +256,7 @@ p  { line-height: 1.7; }
 .nav-toggle {
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
   gap: 5px;
   width: 40px;
@@ -303,8 +304,13 @@ p  { line-height: 1.7; }
 .nav-mobile-actions {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: .75rem;
   padding: 1rem 1.5rem 1.5rem;
+}
+.nav-mobile-actions .btn {
+  width: 100%;
+  justify-content: center;
 }
 
 /* ===== HERO ===== */
@@ -755,7 +761,7 @@ a.contact-method:hover {
   color: var(--text-sm);
   margin-bottom: .2rem;
 }
-.contact-method span,
+.contact-method div span,
 .contact-method address {
   font-size: .95rem;
   color: var(--navy);
@@ -999,12 +1005,47 @@ a.footer-contact-item:hover { color: var(--yellow); }
   .problema-image img { height: 460px; }
 }
 
+/* Mobile only (max 767px) — footer reorder + centering */
+@media (max-width: 767px) {
+  .footer-grid > *:nth-child(1) { order: 1; }
+  .footer-grid > *:nth-child(2) { order: 4; }
+  .footer-grid > *:nth-child(3) { order: 3; }
+  .footer-grid > *:nth-child(4) { order: 2; }
+
+  .footer-brand {
+    max-width: 100%;
+    text-align: center;
+  }
+  .footer-logo { margin: 0 auto 1rem; }
+  .footer-brand p { text-align: center; }
+  .footer-social { justify-content: center; }
+}
+
 /* Tablet+ — 768px */
 @media (min-width: 768px) {
   .nav-menu    { display: flex; }
   .nav-actions { display: flex; }
   .nav-toggle  { display: none; }
   .nav-mobile  { display: none !important; }
+
+  /* Phone/email: visível mas não clicável em desktop/tablet */
+  .nav-phone {
+    pointer-events: none;
+    cursor: default;
+  }
+  .nav-phone:hover { color: rgba(255,255,255,.8); transform: none; box-shadow: none; }
+
+  a.contact-method[href^="tel:"],
+  a.contact-method[href^="mailto:"] {
+    pointer-events: none;
+    cursor: default;
+  }
+  a.contact-method[href^="tel:"]:hover,
+  a.contact-method[href^="mailto:"]:hover {
+    border-color: var(--gray);
+    background: var(--gray-light);
+    transform: none;
+  }
 
   .sobre-grid   { grid-template-columns: 1fr 1fr; gap: 3.5rem; }
   .problema-grid { grid-template-columns: 1fr 1fr; }

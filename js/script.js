@@ -117,6 +117,10 @@
         if (data.success) {
           form.reset();
           if (successMsg) successMsg.style.display = 'block';
+          const waUrl = isMobile
+            ? 'https://api.whatsapp.com/send?phone=5581996992424&text=Ol%C3%A1!%20Acabei%20de%20enviar%20um%20or%C3%A7amento%20pelo%20site.'
+            : 'https://web.whatsapp.com/send?phone=5581996992424&text=Ol%C3%A1!%20Acabei%20de%20enviar%20um%20or%C3%A7amento%20pelo%20site.';
+          setTimeout(() => { window.location.href = waUrl; }, 5000);
         } else {
           if (errorMsg) errorMsg.style.display = 'block';
         }
